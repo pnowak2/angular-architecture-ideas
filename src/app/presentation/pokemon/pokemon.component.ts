@@ -21,7 +21,7 @@ export class PokemonComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private useCase: GetByIdPokemonUsecase,
+    private getByIdUsecase: GetByIdPokemonUsecase,
     private updateUseCase: UpdatePokemonUsecase
   ) {
     this.isEdit$ = this.route.params.pipe(
@@ -34,7 +34,7 @@ export class PokemonComponent implements OnInit {
 
   ngOnInit() {
     const id = this.route.snapshot.params['id'];
-    this.pokemon$ = this.useCase.execute(id);
+    this.pokemon$ = this.getByIdUsecase.execute(id);
 
     this.pokemon$.subscribe(p => this.name = p.name);
   }
@@ -48,7 +48,7 @@ export class PokemonComponent implements OnInit {
         .withName(this.name)
         .build()
     );
-    this.router.navigate(['..']);
+    this.router.navigate(['pokemons', id]);
   }
 
 }

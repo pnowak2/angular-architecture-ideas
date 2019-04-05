@@ -7,7 +7,7 @@
 <button *ngIf="isEdit$ | async" (click)="onUpdate()">Update</button>
 
 <p>
-  <a routerLink="/pokemons">Back</a>
-  <a *ngIf="isRead$ | async" routerLink="edit">Edit</a>
+  <a routerLink="/pokemons">Back</a> | 
+  <a *ngIf="isRead$ | async" routerLink="edit">Edit</a> | 
   <a *ngIf="isEdit$ | async" routerLink="../">Cancel</a>
 </p>
