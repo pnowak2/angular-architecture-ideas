@@ -3,6 +3,7 @@ import { GetByIdPokemonUsecase } from 'src/app/tutorial/usecases/get-by-id-pokem
 import { Observable } from 'rxjs';
 import { Pokemon } from 'src/app/tutorial/domain/model/pokemon.model';
 import { ActivatedRoute } from '@angular/router';
+import { tap, filter, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-pokemon',
@@ -11,11 +12,19 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class PokemonComponent implements OnInit {
   pokemon$: Observable<Pokemon>;
+  isRead$: Observable<boolean>;
+  isEdit$: Observable<boolean>;
 
   constructor(
     private route: ActivatedRoute,
     private useCase: GetByIdPokemonUsecase
   ) {
+    this.isEdit$ = this.route.params.pipe(
+      map(params => params['mode'] === 'edit' ? true : false)
+    );
+    this.isRead$ = this.isEdit$.pipe(
+      map(edit => !edit)
+    );
   }
 
   ngOnInit() {

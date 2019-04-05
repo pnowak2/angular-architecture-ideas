@@ -1,6 +1,11 @@
 <h1>Pokemon</h1>
-<h2>{{ (pokemon$ | async)?.name }}</h2>
+
+
+<h2 *ngIf="isRead$ | async">{{ (pokemon$ | async)?.name }}</h2>
+<input *ngIf="isEdit$ | async" type="text" [value]="(pokemon$ | async)?.name">
 
 <p>
   <a routerLink="/pokemons">Back</a>
+  <a *ngIf="isRead$ | async" routerLink="edit">Edit</a>
+  <a *ngIf="isEdit$ | async" routerLink="../">Cancel</a>
 </p>

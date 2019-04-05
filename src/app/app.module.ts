@@ -22,7 +22,8 @@ import { PokemonComponent } from './presentation/pokemon/pokemon.component';
     RouterModule.forRoot([
       { path: '', redirectTo: '/pokemons',  pathMatch: 'full'  },
       { path: 'pokemons', component: PokemonsComponent },
-      { path: 'pokemons/:id', component: PokemonComponent }
+      { path: 'pokemons/:id', component: PokemonComponent },
+      { path: 'pokemons/:id/:mode', component: PokemonComponent }
     ])
   ],
   providers: [
