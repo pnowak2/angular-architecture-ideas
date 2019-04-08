@@ -1,9 +1,10 @@
 import { GetAllPokemonsUsecase } from './get-all-pokemon.usecase';
 import { PokemonRepository } from '../domain/repository/pokemon.repository';
-import { InMemoryPokemonRepository } from '../data/repository/in-memory-pokemon.repository';
+import { FlexiblePokemonRepository } from '../data/repository/flexible-pokemon.repository';
 import { Pokemon } from '../domain/model/pokemon.model';
 import { GetByIdPokemonUsecase } from './get-by-id-pokemon.usecase';
 import { StubPokemonBuilder } from '../test/stub-pokemon.builder';
+import { InMemoryPokemonDatasource } from '../data/datasource/in-memory-pokemon.datasource';
 
 
 describe('GetByIdPokemonUsecase', () => {
@@ -25,7 +26,9 @@ describe('GetByIdPokemonUsecase', () => {
   });
 
   function createPokemonUsecase(items: Pokemon[]) {
-    const repository: PokemonRepository = new InMemoryPokemonRepository(items);
+    const datasource1 = new InMemoryPokemonDatasource(items);
+    const datasource2 = new InMemoryPokemonDatasource(items);
+    const repository: PokemonRepository = new FlexiblePokemonRepository(datasource1, datasource2);
     return new GetByIdPokemonUsecase(repository);
   }
 

@@ -5,13 +5,15 @@ import { ElephantCardListComponent } from './elephant-card-list/elephant-card-li
 import { CoreModule } from '../core/core.module';
 import { DataModule } from '../data/data.module';
 import { GetAllPokemonsUsecase } from '../tutorial/usecases/get-all-pokemon.usecase';
-import { InMemoryPokemonRepository } from '../tutorial/data/repository/in-memory-pokemon.repository';
+import { FlexiblePokemonRepository } from '../tutorial/data/repository/flexible-pokemon.repository';
 import { PokemonBuilder } from '../tutorial/usecases/pokemon.builder';
 import { PokemonsComponent } from './pokemons/pokemons.component';
 import { PokemonComponent } from './pokemon/pokemon.component';
 import { RouterModule } from '@angular/router';
 import { GetByIdPokemonUsecase } from '../tutorial/usecases/get-by-id-pokemon.usecase';
 import { UpdatePokemonUsecase } from '../tutorial/usecases/update-pokemon.usecase';
+import { InMemoryPokemonDatasource } from '../tutorial/data/datasource/in-memory-pokemon.datasource';
+import { DatabasePokemonDatasource } from '../tutorial/data/datasource/database-pokemon.datasource';
 
 const data = [
   new PokemonBuilder()
@@ -45,25 +47,35 @@ const data = [
   ],
   providers: [
     {
-      provide: GetAllPokemonsUsecase, useFactory: function () {
+      provide: InMemoryPokemonDatasource, useFactory: function () {
+         return new InMemoryPokemonDatasource(data);
+      }
+    },
+    {
+      provide: DatabasePokemonDatasource, useFactory: function () {
+         return new DatabasePokemonDatasource();
+      }
+    },
+    {
+      provide: GetAllPokemonsUsecase, useFactory: function (memoryDS, databaseDS) {
         return new GetAllPokemonsUsecase(
-          new InMemoryPokemonRepository(data)
+          new FlexiblePokemonRepository(memoryDS, databaseDS)
         );
-      }
+      }, deps: [InMemoryPokemonDatasource, DatabasePokemonDatasource]
     },
     {
-      provide: GetByIdPokemonUsecase, useFactory: function () {
+      provide: GetByIdPokemonUsecase, useFactory: function (memoryDS, databaseDS) {
         return new GetByIdPokemonUsecase(
-          new InMemoryPokemonRepository(data)
+          new FlexiblePokemonRepository(memoryDS, databaseDS)
         );
-      }
+      }, deps: [InMemoryPokemonDatasource, DatabasePokemonDatasource]
     },
     {
-      provide: UpdatePokemonUsecase, useFactory: function () {
+      provide: UpdatePokemonUsecase, useFactory: function (memoryDS, databaseDS) {
         return new UpdatePokemonUsecase(
-          new InMemoryPokemonRepository(data)
+          new FlexiblePokemonRepository(memoryDS, databaseDS)
         );
-      }
+      }, deps: [InMemoryPokemonDatasource, DatabasePokemonDatasource]
     }
   ]
 })
