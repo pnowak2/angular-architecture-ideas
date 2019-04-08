@@ -1,3 +1,5 @@
+<button mat-button (click)="onRefresh()">Refresh</button>
+
 <ul>
   <li *ngFor="let pokemon of pokemons$ | async">
     <a [routerLink]="['.', pokemon.id]">{{ pokemon.name }}</a>

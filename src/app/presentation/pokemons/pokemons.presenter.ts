@@ -1,8 +1,8 @@
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { PokemonViewModel } from './pokemon.viewmodel';
 import { PokemonsView } from './pokemons.view';
 import { GetAllPokemonsUsecase } from 'src/app/tutorial/usecases/get-all-pokemon.usecase';
-import { map } from 'rxjs/operators';
+import { map, filter } from 'rxjs/operators';
 import { PokemonViewMapper } from './pokemon.view.mapper';
 
 export class PokemonsPresenter {
@@ -16,5 +16,15 @@ export class PokemonsPresenter {
     );
 
     this.view.setItems(items$);
+  }
+
+  refresh(): any {
+    const items$: Observable<PokemonViewModel[]> = this.useCase.execute().pipe(
+      map(domain => domain.map((it) => new PokemonViewMapper().mapTo(it)))
+    );
+
+    this.view.setItems(items$.pipe(
+      map(arr => arr.filter(i => i.id === '2'))
+    ));
   }
 }

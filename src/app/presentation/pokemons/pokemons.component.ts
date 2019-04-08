@@ -26,4 +26,8 @@ export class PokemonsComponent implements PokemonsView, OnInit {
   setItems(items: Observable<PokemonViewModel[]>) {
     this.pokemons$ = items;
   }
+
+  onRefresh() {
+    this.presenter.refresh();
+  }
 }
