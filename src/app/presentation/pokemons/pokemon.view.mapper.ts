@@ -17,7 +17,7 @@ export class PokemonViewMapper extends Mapper<PokemonViewModel, Pokemon> {
   mapTo(param: Pokemon): PokemonViewModel {
     return {
       id: param.id,
-      name: param.name + ' [vm]'
+      name: `${param.id} - ${param.name}`
     };
   }
 }
